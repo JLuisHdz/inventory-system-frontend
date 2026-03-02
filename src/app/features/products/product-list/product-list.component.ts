@@ -13,6 +13,9 @@ import { Product } from '../../../shared/models/product';
 export class ProductListComponent implements OnInit {
 
   products: Product[] = [];
+  currentPage: number = 0;
+  totalPages: number = 0;
+  pageSize: number = 5;
 
   constructor(private productService: ProductService) {}
 
@@ -26,21 +29,46 @@ export class ProductListComponent implements OnInit {
 
   loadProducts(): void {
 
-  this.productService.getAll().subscribe({
+  this.productService
+      .getAll(this.currentPage, this.pageSize)
+      .subscribe({
 
-    next: response => {
+        next: response => {
 
-      this.products = response.data.content;
+          this.products = response.data.content;
+          this.totalPages = response.data.totalPages;
 
-    },
+        },
 
-    error: err => {
+        error: err => {
 
-      console.error('Error loading products', err);
+          console.error('Error loading products', err);
 
-    }
+        }
 
-  });
+      });
+
+}
+
+nextPage(): void {
+
+  if (this.currentPage < this.totalPages - 1) {
+
+    this.currentPage++;
+    this.loadProducts();
+
+  }
+
+}
+
+previousPage(): void {
+
+  if (this.currentPage > 0) {
+
+    this.currentPage--;
+    this.loadProducts();
+
+  }
 
 }
 }
