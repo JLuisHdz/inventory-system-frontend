@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,10 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+  private authService: AuthService,
+  private router: Router
+) {}
 
   onLogin(): void {
 
@@ -30,9 +34,9 @@ export class LoginComponent {
 
         next: response => {
 
-          console.log('Login success', response);
+        this.router.navigate(['/dashboard']);
 
-        },
+      },
 
         error: error => {
 
