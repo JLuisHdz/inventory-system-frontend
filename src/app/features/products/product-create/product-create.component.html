@@ -1,0 +1,30 @@
+<h2>Create Product</h2>
+
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label>Name</label>
+    <input type="text" formControlName="name" />
+    <div *ngIf="productForm.get('name')?.touched && productForm.get('name')?.invalid">
+      Name is required (min 3 characters)
+    </div>
+  </div>
+
+  <div>
+    <label>Description</label>
+    <input type="text" formControlName="description" />
+  </div>
+
+  <div>
+    <label>Price</label>
+    <input type="number" formControlName="price" />
+  </div>
+
+  <div>
+    <label>Stock</label>
+    <input type="number" formControlName="stock" />
+  </div>
+
+  <button type="submit">Save</button>
+
+</form>

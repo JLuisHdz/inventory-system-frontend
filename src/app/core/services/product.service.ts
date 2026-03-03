@@ -20,4 +20,8 @@ export class ProductService {
         `${this.apiUrl}?page=${page}&size=${size}&sort=id,asc`
     );
     }
+
+    create(product: any) {
+  return this.http.post<any>(`${this.apiUrl}`, product);
+}
 }

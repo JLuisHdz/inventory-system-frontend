@@ -4,6 +4,7 @@ import { DashboardComponent } from './features/dashboard/dashboard/dashboard.com
 import { authGuard } from './core/guards/auth.guard';
 import { ProductListComponent } from './features/products/product-list/product-list.component';
 import { LayoutComponent } from './core/layout/layout.component';
+import { ProductCreateComponent } from './features/products/product-create/product-create.component';
 
 export const routes: Routes = [
 
@@ -17,6 +18,11 @@ export const routes: Routes = [
         component: LayoutComponent,
         canActivate: [authGuard],
         children: [
+
+        {
+            path: 'products/create',
+            component: ProductCreateComponent
+        },
 
         {
             path: 'dashboard',
