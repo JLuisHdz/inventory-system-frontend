@@ -4,7 +4,7 @@ import { DashboardComponent } from './features/dashboard/dashboard/dashboard.com
 import { authGuard } from './core/guards/auth.guard';
 import { ProductListComponent } from './features/products/product-list/product-list.component';
 import { LayoutComponent } from './core/layout/layout.component';
-import { ProductCreateComponent } from './features/products/product-create/product-create.component';
+import { ProductFormComponent } from './features/products/product-form/product-form.component';
 
 export const routes: Routes = [
 
@@ -21,7 +21,12 @@ export const routes: Routes = [
 
         {
             path: 'products/create',
-            component: ProductCreateComponent
+            component: ProductFormComponent
+        },
+        
+        {
+            path: 'products/edit/:id',
+            component: ProductFormComponent
         },
 
         {

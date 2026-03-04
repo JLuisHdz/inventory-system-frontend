@@ -1,5 +1,5 @@
 <h2>Create Product</h2>
-
+<h2>{{ isEditMode ? 'Edit Product' : 'Create Product' }}</h2>
 <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
 
   <div>
@@ -25,6 +25,8 @@
     <input type="number" formControlName="stock" />
   </div>
 
-  <button type="submit">Save</button>
+  <button type="submit">
+  {{ isEditMode ? 'Update' : 'Save' }}
+</button>
 
 </form>
