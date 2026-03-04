@@ -72,4 +72,24 @@ previousPage(): void {
   }
 
 }
+
+deleteProduct(id: number): void {
+
+  const confirmDelete = confirm('Are you sure you want to delete this product?');
+
+  if (!confirmDelete) return;
+
+  this.productService.delete(id).subscribe({
+
+    next: () => {
+      this.loadProducts(); // recarga la tabla
+    },
+
+    error: err => {
+      console.error('Error deleting product', err);
+    }
+
+  });
+
+}
 }

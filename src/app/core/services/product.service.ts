@@ -33,4 +33,8 @@ update(id: number, product: any) {
   return this.http.put<any>(`${this.apiUrl}/${id}`, product);
 }
 
+delete(id: number) {
+  return this.http.delete<any>(`${this.apiUrl}/${id}`);
+}
+
 }
