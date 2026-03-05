@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../shared/models/product';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
@@ -20,6 +22,7 @@ export class ProductListComponent implements OnInit {
   pageSize: number = 5;
   isLoading = false;
   searchTerm: string = '';
+  searchControl = new FormControl('');
 
   constructor(private productService: ProductService) {}
 
@@ -28,6 +31,19 @@ export class ProductListComponent implements OnInit {
   console.log("ProductListComponent loaded");
 
   this.loadProducts();
+
+  this.searchControl.valueChanges
+  .pipe(
+    debounceTime(500),
+    distinctUntilChanged()
+  )
+  .subscribe(value => {
+
+    this.searchTerm = value ?? '';
+    this.currentPage = 0;
+    this.loadProducts();
+
+  });
 
 }
 

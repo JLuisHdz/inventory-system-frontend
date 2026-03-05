@@ -4,11 +4,11 @@
   Loading products...
 </div>
 <div>
-  <input 
-    type="text"
-    placeholder="Search by name..."
-    [(ngModel)]="searchTerm"
-  />
+  <input
+  type="text"
+  placeholder="Search by name..."
+  [formControl]="searchControl"
+/>
   
   <button (click)="onSearch()">Search</button>
 </div>
