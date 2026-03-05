@@ -3,7 +3,15 @@
 <div *ngIf="isLoading">
   Loading products...
 </div>
-
+<div>
+  <input 
+    type="text"
+    placeholder="Search by name..."
+    [(ngModel)]="searchTerm"
+  />
+  
+  <button (click)="onSearch()">Search</button>
+</div>
 <table border="1" *ngIf="!isLoading">
 
   <thead>

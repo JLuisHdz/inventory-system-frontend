@@ -14,27 +14,38 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(page: number = 0, size: number = 5) {
+  getAll(page: number = 0, size: number = 5, searchTerm?: string) {
 
-        return this.http.get<ApiResponse<PageResponse<Product>>>(
-        `${this.apiUrl}?page=${page}&size=${size}&sort=id,asc`
-    );
+    let params: any = {
+      page: page,
+      size: size,
+      sort: 'id,asc'
+    };
+
+    if (searchTerm && searchTerm.trim().length > 0) {
+      params.name = searchTerm;
     }
 
-    create(product: any) {
-  return this.http.post<any>(`${this.apiUrl}`, product);
-}
+    return this.http.get<ApiResponse<PageResponse<Product>>>(
+      this.apiUrl,
+      { params }
+    );
+  }
 
-getById(id: number) {
+  getById(id: number) {
   return this.http.get<any>(`${this.apiUrl}/${id}`);
 }
 
-update(id: number, product: any) {
-  return this.http.put<any>(`${this.apiUrl}/${id}`, product);
-}
+  create(product: any) {
+    return this.http.post<any>(this.apiUrl, product);
+  }
 
-delete(id: number) {
-  return this.http.delete<any>(`${this.apiUrl}/${id}`);
-}
+  update(id: number, product: any) {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, product);
+  }
+
+  delete(id: number) {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 
 }

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../shared/models/product';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
@@ -18,6 +19,7 @@ export class ProductListComponent implements OnInit {
   totalPages: number = 0;
   pageSize: number = 5;
   isLoading = false;
+  searchTerm: string = '';
 
   constructor(private productService: ProductService) {}
 
@@ -34,7 +36,7 @@ export class ProductListComponent implements OnInit {
   this.isLoading = true;
 
   this.productService
-    .getAll(this.currentPage, this.pageSize)
+    .getAll(this.currentPage, this.pageSize, this.searchTerm)
     .subscribe({
 
       next: response => {
@@ -47,13 +49,19 @@ export class ProductListComponent implements OnInit {
 
       error: err => {
 
-        console.error('Error loading products', err);
+        console.error(err);
         this.isLoading = false;
 
       }
 
     });
 
+}
+
+onSearch(): void {
+  console.log("Search clicked:", this.searchTerm);
+  this.currentPage = 0;
+  this.loadProducts();
 }
 
 nextPage(): void {

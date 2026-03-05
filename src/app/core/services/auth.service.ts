@@ -39,6 +39,21 @@ export class AuthService {
 
     }
 
+    getAll(page: number, size: number, name?: string) {
+
+  let params: any = {
+    page: page,
+    size: size,
+    sort: 'id,asc'
+  };
+
+  if (name && name.trim() !== '') {
+    params.name = name;
+  }
+
+  return this.http.get<any>(this.apiUrl, { params });
+}
+
     logout(): void {
 
         localStorage.removeItem('token');
