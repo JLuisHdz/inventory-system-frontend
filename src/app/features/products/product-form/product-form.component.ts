@@ -21,8 +21,9 @@ export class ProductFormComponent {
     stock: [0, [Validators.required, Validators.min(0)]]
   });
 
-  isEditMode = false;
+isEditMode = false;
 productId!: number;
+isSubmitting = false;
 
 constructor(
   private fb: FormBuilder,
@@ -38,17 +39,43 @@ constructor(
     return;
   }
 
+  this.isSubmitting = true;   // 👈 AQUI se activa el loading
+
   const request = this.productForm.value;
 
   if (this.isEditMode) {
 
     this.productService.update(this.productId, request)
-      .subscribe(() => this.router.navigate(['/products']));
+      .subscribe({
+
+        next: () => {
+          this.isSubmitting = false;   // 👈 se desactiva
+          this.router.navigate(['/products']);
+        },
+
+        error: err => {
+          console.error(err);
+          this.isSubmitting = false;   // 👈 se desactiva si falla
+        }
+
+      });
 
   } else {
 
     this.productService.create(request)
-      .subscribe(() => this.router.navigate(['/products']));
+      .subscribe({
+
+        next: () => {
+          this.isSubmitting = false;   // 👈 se desactiva
+          this.router.navigate(['/products']);
+        },
+
+        error: err => {
+          console.error(err);
+          this.isSubmitting = false;   // 👈 se desactiva si falla
+        }
+
+      });
 
   }
 

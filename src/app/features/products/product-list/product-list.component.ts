@@ -17,6 +17,7 @@ export class ProductListComponent implements OnInit {
   currentPage: number = 0;
   totalPages: number = 0;
   pageSize: number = 5;
+  isLoading = false;
 
   constructor(private productService: ProductService) {}
 
@@ -30,24 +31,28 @@ export class ProductListComponent implements OnInit {
 
   loadProducts(): void {
 
+  this.isLoading = true;
+
   this.productService
-      .getAll(this.currentPage, this.pageSize)
-      .subscribe({
+    .getAll(this.currentPage, this.pageSize)
+    .subscribe({
 
-        next: response => {
+      next: response => {
 
-          this.products = response.data.content;
-          this.totalPages = response.data.totalPages;
+        this.products = response.data.content;
+        this.totalPages = response.data.totalPages;
+        this.isLoading = false;
 
-        },
+      },
 
-        error: err => {
+      error: err => {
 
-          console.error('Error loading products', err);
+        console.error('Error loading products', err);
+        this.isLoading = false;
 
-        }
+      }
 
-      });
+    });
 
 }
 

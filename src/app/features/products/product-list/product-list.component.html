@@ -1,6 +1,10 @@
 <h2>Products</h2>
 
-<table border="1">
+<div *ngIf="isLoading">
+  Loading products...
+</div>
+
+<table border="1" *ngIf="!isLoading">
 
   <thead>
     <tr>
@@ -30,26 +34,25 @@
         </button>
       </td>
       <td>
-        <button (click)="deleteProduct(product.id)">
-          Delete
-        </button>
+        <button (click)="deleteProduct(product.id)"
+        [disabled]="isLoading">
+      Delete
+      </button>
       </td>
     </tr>
   </tbody>
 
-  <div style="margin-top: 20px;">
+  <div style="margin-top: 20px;" class="pagination">
 
-  <button (click)="previousPage()" [disabled]="currentPage === 0">
-    Previous
-  </button>
+  <button (click)="previousPage()" 
+        [disabled]="currentPage === 0 || isLoading">Previous</button>
 
   <span>
     Page {{ currentPage + 1 }} of {{ totalPages }}
   </span>
 
-  <button (click)="nextPage()" [disabled]="currentPage === totalPages - 1">
-    Next
-  </button>
+  <button (click)="nextPage()" 
+        [disabled]="currentPage >= totalPages - 1 || isLoading">Next</button>
 
   </div>
 
