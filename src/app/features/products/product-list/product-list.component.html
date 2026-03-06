@@ -3,16 +3,16 @@
 <div *ngIf="isLoading">
   Loading products...
 </div>
+<div *ngIf="!isLoading && !hasResults">
+  No products found
+</div>
 <div>
   <input
   type="text"
   placeholder="Search by name..."
-  [formControl]="searchControl"
-/>
-  
-  <button (click)="onSearch()">Search</button>
+  [formControl]="searchControl"/>
 </div>
-<table border="1" *ngIf="!isLoading">
+<table border="1" *ngIf="!isLoading && hasResults">
 
   <thead>
     <tr>

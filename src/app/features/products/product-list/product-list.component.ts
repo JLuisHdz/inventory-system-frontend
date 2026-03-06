@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-product-list',
@@ -23,6 +24,8 @@ export class ProductListComponent implements OnInit {
   isLoading = false;
   searchTerm: string = '';
   searchControl = new FormControl('');
+  hasResults = true;
+  
 
   constructor(private productService: ProductService) {}
 
@@ -59,6 +62,9 @@ export class ProductListComponent implements OnInit {
 
         this.products = response.data.content;
         this.totalPages = response.data.totalPages;
+
+        this.hasResults = this.products.length > 0;
+
         this.isLoading = false;
 
       },
@@ -104,18 +110,44 @@ previousPage(): void {
 
 deleteProduct(id: number): void {
 
-  const confirmDelete = confirm('Are you sure you want to delete this product?');
+  Swal.fire({
+    title: 'Delete product?',
+    text: 'This action cannot be undone',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it'
+  }).then((result) => {
 
-  if (!confirmDelete) return;
+    if (result.isConfirmed) {
 
-  this.productService.delete(id).subscribe({
+      this.productService.delete(id).subscribe({
 
-    next: () => {
-      this.loadProducts(); // recarga la tabla
-    },
+        next: () => {
 
-    error: err => {
-      console.error('Error deleting product', err);
+          Swal.fire(
+            'Deleted!',
+            'Product has been deleted.',
+            'success'
+          );
+
+          this.loadProducts();
+
+        },
+
+        error: () => {
+
+          Swal.fire(
+            'Error',
+            'Could not delete product',
+            'error'
+          );
+
+        }
+
+      });
+
     }
 
   });
