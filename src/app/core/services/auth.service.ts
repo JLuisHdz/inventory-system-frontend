@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { LoginRequest } from "../../shared/models/login-request";
 import { Observable, tap } from "rxjs";
 import { LoginResponse } from "../../shared/models/login-response";
+import { jwtDecode } from "jwt-decode";
 
 @Injectable({
     providedIn: 'root'
@@ -58,4 +59,32 @@ export class AuthService {
 
         localStorage.removeItem('token');
     }
+
+    getUserRoles(): string[] {
+  const token = localStorage.getItem('token');
+
+  if (!token) return [];
+
+  const payload = JSON.parse(atob(token.split('.')[1]));
+
+  return payload.roles || [];
+}
+
+isAdmin(): boolean {
+  return this.getUserRoles().some(r => r.includes('ADMIN'));
+}
+
+isManager(): boolean {
+  return this.getUserRoles().some(r => r.includes('MANAGER'));
+}
+
+isEmployee(): boolean {
+  return this.getUserRoles().some(r => r.includes('EMPLOYEE'));
+}
+
+isLoggedIn(): boolean {
+  const token = localStorage.getItem('token');
+  return !!token;
+}
+
 }

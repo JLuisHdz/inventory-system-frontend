@@ -37,15 +37,18 @@
       <td>{{ product.stock }}</td>
       <td>{{ product.creationDate }}</td>
       <td>
-        <button [routerLink]="['/products/edit', product.id]">
+        <button
+          *ngIf="isAdmin || isManager"
+          [routerLink]="['/products/edit', product.id]">
           Edit
         </button>
       </td>
       <td>
-        <button (click)="deleteProduct(product.id)"
-        [disabled]="isLoading">
-      Delete
-      </button>
+        <button
+          *ngIf="isAdmin"
+          (click)="deleteProduct(product.id)">
+          Delete
+        </button>
       </td>
     </tr>
   </tbody>

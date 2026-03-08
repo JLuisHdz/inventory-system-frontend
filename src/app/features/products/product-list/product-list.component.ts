@@ -7,13 +7,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './product-list.component.html',
-  styleUrl: './product-list.component.css'
+  styleUrl: './product-list.component.css',
 })
 export class ProductListComponent implements OnInit {
 
@@ -25,16 +26,30 @@ export class ProductListComponent implements OnInit {
   searchTerm: string = '';
   searchControl = new FormControl('');
   hasResults = true;
+  isAdmin = false;
+  isManager = false;
   
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
 
+  console.log("Token:", localStorage.getItem("token"));
   console.log("ProductListComponent loaded");
 
+  // Cargar roles al iniciar
+  this.isAdmin = this.authService.isAdmin();
+  this.isManager = this.authService.isManager();
+
+  console.log("Roles:", this.authService.getUserRoles());
+
+  // Cargar productos
   this.loadProducts();
 
+  // Buscador
   this.searchControl.valueChanges
   .pipe(
     debounceTime(500),
@@ -44,13 +59,18 @@ export class ProductListComponent implements OnInit {
 
     this.searchTerm = value ?? '';
     this.currentPage = 0;
-    this.loadProducts();
+
+    if (this.authService.isLoggedIn()) {
+      this.loadProducts();
+    }
 
   });
 
 }
 
   loadProducts(): void {
+
+  console.log("loadProducts ejecutándose");
 
   this.isLoading = true;
 
