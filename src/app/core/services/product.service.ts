@@ -48,4 +48,8 @@ export class ProductService {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 
+  getStats() {
+  return this.http.get<any>(`${this.apiUrl}/stats`);
+}
+
 }

@@ -1,0 +1,20 @@
+<h2>Inventory Dashboard</h2>
+
+<div class="stats-container">
+
+  <div class="stat-card">
+    <h3>Total Products</h3>
+    <p>{{ stats?.totalProducts || 0 }}</p>
+  </div>
+
+  <div class="stat-card">
+    <h3>Low Stock Products</h3>
+    <p>{{ stats?.lowStockProducts || 0 }}</p>
+  </div>
+
+  <div class="stat-card">
+    <h3>Total Inventory Value</h3>
+    <p>${{ stats?.totalInventoryValue || 0 }}</p>
+  </div>
+
+</div>
