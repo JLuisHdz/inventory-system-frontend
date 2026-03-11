@@ -34,7 +34,23 @@
       <td>{{ product.name }}</td>
       <td>{{ product.description }}</td>
       <td>{{ product.price }}</td>
-      <td>{{ product.stock }}</td>
+      <td
+      [ngClass]="{
+        'stock-ok': product.stock > 5,
+        'stock-low': product.stock > 0 && product.stock <= 5,
+        'stock-out': product.stock === 0
+      }"
+      >
+      {{ product.stock }}
+
+      <span *ngIf="product.stock > 0 && product.stock <= 5">
+          ⚠ Low
+        </span>
+
+        <span *ngIf="product.stock === 0">
+        Out
+        </span>
+      </td>
       <td>{{ product.creationDate }}</td>
       <td>
         <button
