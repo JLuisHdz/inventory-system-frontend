@@ -28,6 +28,7 @@ export class ProductListComponent implements OnInit {
   hasResults = true;
   isAdmin = false;
   isManager = false;
+  selectedFilter: string = 'all';
   
 
   constructor(
@@ -172,5 +173,22 @@ deleteProduct(id: number): void {
 
   });
 
+}
+
+setFilter(filter: string) {
+  this.selectedFilter = filter;
+}
+
+get filteredProducts() {
+
+  if (this.selectedFilter === 'low') {
+    return this.products.filter(p => p.stock > 0 && p.stock <= 5);
+  }
+
+  if (this.selectedFilter === 'out') {
+    return this.products.filter(p => p.stock === 0);
+  }
+
+  return this.products;
 }
 }

@@ -12,6 +12,21 @@
   placeholder="Search by name..."
   [formControl]="searchControl"/>
 </div>
+<div class="filters">
+
+  <button (click)="setFilter('all')">
+    All
+  </button>
+
+  <button (click)="setFilter('low')">
+    Low Stock
+  </button>
+
+  <button (click)="setFilter('out')">
+    Out of Stock
+  </button>
+
+</div>
 <table border="1" *ngIf="!isLoading && hasResults">
 
   <thead>
@@ -29,7 +44,7 @@
   Create Product
   </button>
   <tbody>
-    <tr *ngFor="let product of products" >
+    <tr *ngFor="let product of filteredProducts" >
       <td>{{ product.id }}</td>
       <td>{{ product.name }}</td>
       <td>{{ product.description }}</td>
