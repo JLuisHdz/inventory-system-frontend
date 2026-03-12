@@ -29,6 +29,8 @@ export class ProductListComponent implements OnInit {
   isAdmin = false;
   isManager = false;
   selectedFilter: string = 'all';
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
   
 
   constructor(
@@ -181,14 +183,57 @@ setFilter(filter: string) {
 
 get filteredProducts() {
 
+  let filtered = this.products;
+
   if (this.selectedFilter === 'low') {
-    return this.products.filter(p => p.stock > 0 && p.stock <= 5);
+    filtered = filtered.filter(p => p.stock > 0 && p.stock <= 5);
   }
 
   if (this.selectedFilter === 'out') {
-    return this.products.filter(p => p.stock === 0);
+    filtered = filtered.filter(p => p.stock === 0);
   }
 
-  return this.products;
+  if (this.sortColumn) {
+
+    filtered = [...filtered].sort((a, b) => {
+
+  let valueA = (a as any)[this.sortColumn];
+  let valueB = (b as any)[this.sortColumn];
+
+  // manejar fechas
+  if (this.sortColumn === 'creationDate') {
+    valueA = new Date(valueA).getTime();
+    valueB = new Date(valueB).getTime();
+  }
+
+  // manejar texto
+  if (typeof valueA === 'string' && typeof valueB === 'string') {
+    valueA = valueA.toLowerCase();
+    valueB = valueB.toLowerCase();
+  }
+
+  if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+  if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+
+  return 0;
+
+});
+
+
+  }
+
+  return filtered;
+
+}
+
+sort(column: string) {
+
+  if (this.sortColumn === column) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.sortColumn = column;
+    this.sortDirection = 'asc';
+  }
+
 }
 }

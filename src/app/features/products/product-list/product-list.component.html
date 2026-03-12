@@ -7,10 +7,7 @@
   No products found
 </div>
 <div>
-  <input
-  type="text"
-  placeholder="Search by name..."
-  [formControl]="searchControl"/>
+  <input type="text" placeholder="Search by name..." [formControl]="searchControl" />
 </div>
 <div class="filters">
 
@@ -31,53 +28,77 @@
 
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Price</th>
-      <th>Stock</th>
-      <th>Created</th>
+      <th (click)="sort('id')" style="cursor:pointer">
+        Id
+        <span *ngIf="sortColumn === 'id'">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </th>
+      <th (click)="sort('name')" style="cursor:pointer">
+        Name
+        <span *ngIf="sortColumn === 'name'">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </th>
+      <th (click)="sort('description')" style="cursor:pointer">
+        Description
+        <span *ngIf="sortColumn === 'description'">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </th>
+      <th (click)="sort('price')" style="cursor:pointer">
+        Price
+        <span *ngIf="sortColumn === 'price'">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </th>
+      <th (click)="sort('stock')" style="cursor:pointer">
+        Stock
+        <span *ngIf="sortColumn === 'stock'">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </th>
+      <th (click)="sort('creationDate')" style="cursor:pointer">
+        Created
+        <span *ngIf="sortColumn === 'creationDate'">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </th>
     </tr>
   </thead>
 
   <button routerLink="/products/create">
-  Create Product
+    Create Product
   </button>
   <tbody>
-    <tr *ngFor="let product of filteredProducts" >
+    <tr *ngFor="let product of filteredProducts">
       <td>{{ product.id }}</td>
       <td>{{ product.name }}</td>
       <td>{{ product.description }}</td>
       <td>{{ product.price }}</td>
-      <td
-      [ngClass]="{
+      <td [ngClass]="{
         'stock-ok': product.stock > 5,
         'stock-low': product.stock > 0 && product.stock <= 5,
         'stock-out': product.stock === 0
-      }"
-      >
-      {{ product.stock }}
+      }">
+        {{ product.stock }}
 
-      <span *ngIf="product.stock > 0 && product.stock <= 5">
+        <span *ngIf="product.stock > 0 && product.stock <= 5">
           ⚠ Low
         </span>
 
         <span *ngIf="product.stock === 0">
-        Out
+          Out
         </span>
       </td>
       <td>{{ product.creationDate }}</td>
       <td>
-        <button
-          *ngIf="isAdmin || isManager"
-          [routerLink]="['/products/edit', product.id]">
+        <button *ngIf="isAdmin || isManager" [routerLink]="['/products/edit', product.id]">
           Edit
         </button>
       </td>
       <td>
-        <button
-          *ngIf="isAdmin"
-          (click)="deleteProduct(product.id)">
+        <button *ngIf="isAdmin" (click)="deleteProduct(product.id)">
           Delete
         </button>
       </td>
@@ -86,15 +107,13 @@
 
   <div style="margin-top: 20px;" class="pagination">
 
-  <button (click)="previousPage()" 
-        [disabled]="currentPage === 0 || isLoading">Previous</button>
+    <button (click)="previousPage()" [disabled]="currentPage === 0 || isLoading">Previous</button>
 
-  <span>
-    Page {{ currentPage + 1 }} of {{ totalPages }}
-  </span>
+    <span>
+      Page {{ currentPage + 1 }} of {{ totalPages }}
+    </span>
 
-  <button (click)="nextPage()" 
-        [disabled]="currentPage >= totalPages - 1 || isLoading">Next</button>
+    <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1 || isLoading">Next</button>
 
   </div>
 
