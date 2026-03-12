@@ -1,86 +1,127 @@
-<h2>Products</h2>
+<h2 class="text-2xl font-bold mb-4">Products</h2>
 
 <div *ngIf="isLoading">
   Loading products...
 </div>
+
 <div *ngIf="!isLoading && !hasResults">
   No products found
 </div>
-<div>
-  <input type="text" placeholder="Search by name..." [formControl]="searchControl" />
-</div>
-<div class="filters">
 
-  <button (click)="setFilter('all')">
+<div class="mb-3">
+  <input
+    type="text"
+    placeholder="Search by name..."
+    [formControl]="searchControl"
+    class="border p-2 rounded"
+  />
+</div>
+
+<div class="filters mb-4">
+
+  <button (click)="setFilter('all')" class="border px-3 py-1 mr-2 rounded">
     All
   </button>
 
-  <button (click)="setFilter('low')">
+  <button (click)="setFilter('low')" class="border px-3 py-1 mr-2 rounded">
     Low Stock
   </button>
 
-  <button (click)="setFilter('out')">
+  <button (click)="setFilter('out')" class="border px-3 py-1 rounded">
     Out of Stock
   </button>
 
 </div>
-<table border="1" *ngIf="!isLoading && hasResults">
 
-  <thead>
+<button
+  routerLink="/products/create"
+  class="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+>
+  Create Product
+</button>
+
+<div class="overflow-x-auto">
+
+<table class="min-w-full border border-gray-300" *ngIf="!isLoading && hasResults">
+
+  <thead class="bg-gray-800 text-white">
+
     <tr>
-      <th (click)="sort('id')" style="cursor:pointer">
+
+      <th class="px-4 py-2 border cursor-pointer" (click)="sort('id')">
         Id
-        <span *ngIf="sortColumn === 'id'">
+        <span *ngIf="sortColumn === 'id'" class="text-white">
           {{ sortDirection === 'asc' ? '↑' : '↓' }}
         </span>
       </th>
-      <th (click)="sort('name')" style="cursor:pointer">
+
+      <th class="px-4 py-2 border cursor-pointer" (click)="sort('name')">
         Name
-        <span *ngIf="sortColumn === 'name'">
+        <span *ngIf="sortColumn === 'name'" class="text-white">
           {{ sortDirection === 'asc' ? '↑' : '↓' }}
         </span>
       </th>
-      <th (click)="sort('description')" style="cursor:pointer">
+
+      <th class="px-4 py-2 border cursor-pointer" (click)="sort('description')">
         Description
-        <span *ngIf="sortColumn === 'description'">
+        <span *ngIf="sortColumn === 'description'" class="text-white">
           {{ sortDirection === 'asc' ? '↑' : '↓' }}
         </span>
       </th>
-      <th (click)="sort('price')" style="cursor:pointer">
+
+      <th class="px-4 py-2 border cursor-pointer" (click)="sort('price')">
         Price
-        <span *ngIf="sortColumn === 'price'">
+        <span *ngIf="sortColumn === 'price'" class="text-white">
           {{ sortDirection === 'asc' ? '↑' : '↓' }}
         </span>
       </th>
-      <th (click)="sort('stock')" style="cursor:pointer">
+
+      <th class="px-4 py-2 border cursor-pointer" (click)="sort('stock')">
         Stock
-        <span *ngIf="sortColumn === 'stock'">
+        <span *ngIf="sortColumn === 'stock'" class="text-white">
           {{ sortDirection === 'asc' ? '↑' : '↓' }}
         </span>
       </th>
-      <th (click)="sort('creationDate')" style="cursor:pointer">
+
+      <th class="px-4 py-2 border cursor-pointer" (click)="sort('creationDate')">
         Created
-        <span *ngIf="sortColumn === 'creationDate'">
+        <span *ngIf="sortColumn === 'creationDate'" class="text-white">
           {{ sortDirection === 'asc' ? '↑' : '↓' }}
         </span>
       </th>
+
+      <th class="px-4 py-2 border">
+        Actions
+      </th>
+
     </tr>
+
   </thead>
 
-  <button routerLink="/products/create">
-    Create Product
-  </button>
   <tbody>
-    <tr *ngFor="let product of filteredProducts">
-      <td>{{ product.id }}</td>
-      <td>{{ product.name }}</td>
-      <td>{{ product.description }}</td>
-      <td>{{ product.price }}</td>
-      <td [ngClass]="{
-        'stock-ok': product.stock > 5,
-        'stock-low': product.stock > 0 && product.stock <= 5,
-        'stock-out': product.stock === 0
-      }">
+
+    <tr
+      *ngFor="let product of filteredProducts"
+      class="hover:bg-gray-100"
+    >
+
+      <td class="px-4 py-2 border">{{ product.id }}</td>
+
+      <td class="px-4 py-2 border">{{ product.name }}</td>
+
+      <td class="px-4 py-2 border">{{ product.description }}</td>
+
+      <td class="px-4 py-2 border">{{ product.price }}</td>
+
+      <td
+        class="px-4 py-2 border"
+        [ngClass]="{
+          'bg-green-100': product.stock > 5,
+          'bg-yellow-100': product.stock > 0 && product.stock <= 5,
+          'bg-red-100': product.stock === 0
+        }"
+      >
+
         {{ product.stock }}
 
         <span *ngIf="product.stock > 0 && product.stock <= 5">
@@ -90,31 +131,51 @@
         <span *ngIf="product.stock === 0">
           Out
         </span>
+
       </td>
-      <td>{{ product.creationDate }}</td>
-      <td>
-        <button *ngIf="isAdmin || isManager" [routerLink]="['/products/edit', product.id]">
+
+      <td class="px-4 py-2 border">{{ product.creationDate }}</td>
+
+      <td class="px-4 py-2 border">
+
+        <button
+          *ngIf="isAdmin || isManager"
+          [routerLink]="['/products/edit', product.id]"
+          class="text-blue-600 hover:underline mr-3"
+        >
           Edit
         </button>
-      </td>
-      <td>
-        <button *ngIf="isAdmin" (click)="deleteProduct(product.id)">
+
+        <button
+          *ngIf="isAdmin"
+          (click)="deleteProduct(product.id)"
+          class="text-red-600 hover:underline"
+        >
           Delete
         </button>
+
       </td>
+
     </tr>
+
   </tbody>
 
-  <div style="margin-top: 20px;" class="pagination">
-
-    <button (click)="previousPage()" [disabled]="currentPage === 0 || isLoading">Previous</button>
-
-    <span>
-      Page {{ currentPage + 1 }} of {{ totalPages }}
-    </span>
-
-    <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1 || isLoading">Next</button>
-
-  </div>
-
 </table>
+
+</div>
+
+<div style="margin-top: 20px;" class="pagination">
+
+  <button (click)="previousPage()" [disabled]="currentPage === 0 || isLoading">
+    Previous
+  </button>
+
+  <span>
+    Page {{ currentPage + 1 }} of {{ totalPages }}
+  </span>
+
+  <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1 || isLoading">
+    Next
+  </button>
+
+</div>
