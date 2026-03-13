@@ -1,31 +1,50 @@
-<div class=" login-container">
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
 
-    <h2>Login</h2>
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
 
-    <form (ngSubmit)="onLogin()">
+    <h2 class="text-2xl font-bold mb-6 text-center">
+      Login
+    </h2>
 
-        <div>
-            <label>Username</label>
-            <input
-            type="text"
-            [(ngModel)]="username"
-            name="username"
-            required>
-        </div>
+    <form (ngSubmit)="onLogin()" class="space-y-4">
 
-        <div>
-            <label>password</label>
-            <input
-            type="password"
-            [(ngModel)]="password"
-            name="password"
-            required>
-        </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Username
+        </label>
 
-        <button type="submit">
-            Login
-        </button>
-        
+        <input
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          required
+          class="mt-1 w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        >
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">
+          Password
+        </label>
+
+        <input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          class="mt-1 w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        >
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+      >
+        Login
+      </button>
+
     </form>
+
+  </div>
 
 </div>
