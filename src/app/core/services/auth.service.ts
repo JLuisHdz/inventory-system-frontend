@@ -6,85 +6,97 @@ import { LoginResponse } from "../../shared/models/login-response";
 import { jwtDecode } from "jwt-decode";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthService {
 
-    private apiUrl = 'http://localhost:8080/auth';
+  private apiUrl = 'http://localhost:8080/auth';
 
-    constructor(private http: HttpClient){}
+  constructor(private http: HttpClient) { }
 
-    Login(request: LoginRequest): Observable<LoginResponse> {
+  Login(request: LoginRequest): Observable<LoginResponse> {
 
-        return this.http.post<LoginResponse>(
-            `${this.apiUrl}/login`,
-            request
-        ).pipe(
-            tap(response => {
+    return this.http.post<LoginResponse>(
+      `${this.apiUrl}/login`,
+      request
+    ).pipe(
+      tap(response => {
 
-                this.saveToken(response.token);
-            })
-        );
+        this.saveToken(response.token);
+      })
+    );
 
-    }
-
-    saveToken(token: string): void {
-
-        localStorage.setItem('token', token);
-
-    }
-
-    getToken(): string | null {
-
-        return localStorage.getItem('token');
-
-    }
-
-    getAll(page: number, size: number, name?: string) {
-
-  let params: any = {
-    page: page,
-    size: size,
-    sort: 'id,asc'
-  };
-
-  if (name && name.trim() !== '') {
-    params.name = name;
   }
 
-  return this.http.get<any>(this.apiUrl, { params });
-}
+  saveToken(token: string): void {
 
-    logout(): void {
+    localStorage.setItem('token', token);
 
-        localStorage.removeItem('token');
+  }
+
+  getToken(): string | null {
+
+    return localStorage.getItem('token');
+
+  }
+
+  getAll(page: number, size: number, name?: string) {
+
+    let params: any = {
+      page: page,
+      size: size,
+      sort: 'id,asc'
+    };
+
+    if (name && name.trim() !== '') {
+      params.name = name;
     }
 
-    getUserRoles(): string[] {
-  const token = localStorage.getItem('token');
+    return this.http.get<any>(this.apiUrl, { params });
+  }
 
-  if (!token) return [];
+  logout(): void {
 
-  const payload = JSON.parse(atob(token.split('.')[1]));
+    localStorage.removeItem('token');
+  }
 
-  return payload.roles || [];
-}
+  getUserRoles(): string[] {
+    const token = localStorage.getItem('token');
 
-isAdmin(): boolean {
-  return this.getUserRoles().some(r => r.includes('ADMIN'));
-}
+    if (!token) return [];
 
-isManager(): boolean {
-  return this.getUserRoles().some(r => r.includes('MANAGER'));
-}
+    const payload = JSON.parse(atob(token.split('.')[1]));
 
-isEmployee(): boolean {
-  return this.getUserRoles().some(r => r.includes('EMPLOYEE'));
-}
+    return payload.roles || [];
+  }
 
-isLoggedIn(): boolean {
-  const token = localStorage.getItem('token');
-  return !!token;
-}
+  getUsername(): string | null {
+
+    const token = localStorage.getItem('token');
+
+    if (!token) return null;
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+
+    return payload.sub || payload.username;
+
+  }
+
+  isAdmin(): boolean {
+    return this.getUserRoles().some(r => r.includes('ADMIN'));
+  }
+
+  isManager(): boolean {
+    return this.getUserRoles().some(r => r.includes('MANAGER'));
+  }
+
+  isEmployee(): boolean {
+    return this.getUserRoles().some(r => r.includes('EMPLOYEE'));
+  }
+
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
 
 }

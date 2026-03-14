@@ -20,11 +20,17 @@ export class LayoutComponent {
     private router: Router
   ) {}
 
+  ngOnInit() {
+  this.username = this.authService.getUsername();
+}
+
   logout(): void {
 
     this.authService.logout();
     this.router.navigate(['/login']);
 
   }
+
+  username: string | null = null;
 
 }
