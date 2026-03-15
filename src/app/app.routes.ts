@@ -31,12 +31,14 @@ export const routes: Routes = [
 
         {
             path: 'dashboard',
-            component: DashboardComponent
+            component: DashboardComponent,
+            data: { animation: 'Dashboard' }
         },
 
         {
             path: 'products',
-            component: ProductListComponent
+            component: ProductListComponent,
+            data: { animation: 'Dashboard' }
         }
 
     ]
