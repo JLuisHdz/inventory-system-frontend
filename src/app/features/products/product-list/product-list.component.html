@@ -9,158 +9,139 @@
 </div>
 
 <div class="mb-3">
-  <input
-    type="text"
-    placeholder="Search by name..."
-    [formControl]="searchControl"
-    class="border p-2 rounded"
-  />
+  <input type="text" placeholder="Search by name..." [formControl]="searchControl" class="border p-2 rounded" />
 </div>
 
 <div class="filters mb-4">
 
-  <button (click)="setFilter('all')" class="border px-3 py-1 mr-2 rounded">
+  <button (click)="setFilter('all')" class="px-3 py-1 border rounded hover:bg-gray-100 transition-colors">
     All
   </button>
 
-  <button (click)="setFilter('low')" class="border px-3 py-1 mr-2 rounded">
+  <button (click)="setFilter('low')" class="px-3 py-1 border rounded hover:bg-gray-100 transition-colors">
     Low Stock
   </button>
 
-  <button (click)="setFilter('out')" class="border px-3 py-1 rounded">
+  <button (click)="setFilter('out')" class="px-3 py-1 border rounded hover:bg-gray-100 transition-colors">
     Out of Stock
   </button>
 
 </div>
 
-<button
-  routerLink="/products/create"
-  class="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
->
+<button routerLink="/products/create"
+  class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-150">
   Create Product
 </button>
 
 <div class="overflow-x-auto">
 
-<table class="min-w-full border border-gray-300" *ngIf="!isLoading && hasResults">
+  <table class="min-w-full bg-white rounded shadow hover:shadow-md transition-shadow" *ngIf="!isLoading && hasResults">
 
-  <thead class="bg-gray-800 text-white">
+    <thead class="bg-gray-800 text-white">
 
-    <tr>
+      <tr class="border-b hover:bg-gray-700 transition-colors duration-150">
 
-      <th class="px-4 py-2 border cursor-pointer" (click)="sort('id')">
-        Id
-        <span *ngIf="sortColumn === 'id'" class="text-white">
-          {{ sortDirection === 'asc' ? '↑' : '↓' }}
-        </span>
-      </th>
+        <th class="px-4 py-2 border cursor-pointer" (click)="sort('id')">
+          Id
+          <span *ngIf="sortColumn === 'id'" class="text-white">
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          </span>
+        </th>
 
-      <th class="px-4 py-2 border cursor-pointer" (click)="sort('name')">
-        Name
-        <span *ngIf="sortColumn === 'name'" class="text-white">
-          {{ sortDirection === 'asc' ? '↑' : '↓' }}
-        </span>
-      </th>
+        <th class="px-4 py-2 border cursor-pointer" (click)="sort('name')">
+          Name
+          <span *ngIf="sortColumn === 'name'" class="text-white">
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          </span>
+        </th>
 
-      <th class="px-4 py-2 border cursor-pointer" (click)="sort('description')">
-        Description
-        <span *ngIf="sortColumn === 'description'" class="text-white">
-          {{ sortDirection === 'asc' ? '↑' : '↓' }}
-        </span>
-      </th>
+        <th class="px-4 py-2 border cursor-pointer" (click)="sort('description')">
+          Description
+          <span *ngIf="sortColumn === 'description'" class="text-white">
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          </span>
+        </th>
 
-      <th class="px-4 py-2 border cursor-pointer" (click)="sort('price')">
-        Price
-        <span *ngIf="sortColumn === 'price'" class="text-white">
-          {{ sortDirection === 'asc' ? '↑' : '↓' }}
-        </span>
-      </th>
+        <th class="px-4 py-2 border cursor-pointer" (click)="sort('price')">
+          Price
+          <span *ngIf="sortColumn === 'price'" class="text-white">
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          </span>
+        </th>
 
-      <th class="px-4 py-2 border cursor-pointer" (click)="sort('stock')">
-        Stock
-        <span *ngIf="sortColumn === 'stock'" class="text-white">
-          {{ sortDirection === 'asc' ? '↑' : '↓' }}
-        </span>
-      </th>
+        <th class="px-4 py-2 border cursor-pointer" (click)="sort('stock')">
+          Stock
+          <span *ngIf="sortColumn === 'stock'" class="text-white">
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          </span>
+        </th>
 
-      <th class="px-4 py-2 border cursor-pointer" (click)="sort('creationDate')">
-        Created
-        <span *ngIf="sortColumn === 'creationDate'" class="text-white">
-          {{ sortDirection === 'asc' ? '↑' : '↓' }}
-        </span>
-      </th>
+        <th class="px-4 py-2 border cursor-pointer" (click)="sort('creationDate')">
+          Created
+          <span *ngIf="sortColumn === 'creationDate'" class="text-white">
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          </span>
+        </th>
 
-      <th class="px-4 py-2 border">
-        Actions
-      </th>
+        <th class="px-4 py-2 border">
+          Actions
+        </th>
 
-    </tr>
+      </tr>
 
-  </thead>
+    </thead>
 
-  <tbody>
+    <tbody>
 
-    <tr
-      *ngFor="let product of filteredProducts"
-      class="hover:bg-gray-100"
-    >
+      <tr *ngFor="let product of filteredProducts" class="hover:bg-gray-100">
 
-      <td class="px-4 py-2 border">{{ product.id }}</td>
+        <td class="px-4 py-2 border">{{ product.id }}</td>
 
-      <td class="px-4 py-2 border">{{ product.name }}</td>
+        <td class="px-4 py-2 border">{{ product.name }}</td>
 
-      <td class="px-4 py-2 border">{{ product.description }}</td>
+        <td class="px-4 py-2 border">{{ product.description }}</td>
 
-      <td class="px-4 py-2 border">{{ product.price }}</td>
+        <td class="px-4 py-2 border">{{ product.price }}</td>
 
-      <td
-        class="px-4 py-2 border"
-        [ngClass]="{
+        <td class="px-4 py-2 border" [ngClass]="{
           'bg-green-100': product.stock > 5,
           'bg-yellow-100': product.stock > 0 && product.stock <= 5,
           'bg-red-100': product.stock === 0
-        }"
-      >
+        }">
 
-        {{ product.stock }}
+          {{ product.stock }}
 
-        <span *ngIf="product.stock > 0 && product.stock <= 5">
-          ⚠ Low
-        </span>
+          <span *ngIf="product.stock > 0 && product.stock <= 5">
+            ⚠ Low
+          </span>
 
-        <span *ngIf="product.stock === 0">
-          Out
-        </span>
+          <span *ngIf="product.stock === 0">
+            Out
+          </span>
 
-      </td>
+        </td>
 
-      <td class="px-4 py-2 border">{{ product.creationDate }}</td>
+        <td class="px-4 py-2 border">{{ product.creationDate }}</td>
 
-      <td class="px-4 py-2 border">
+        <td class="px-4 py-2 border flex gap-4">
 
-        <button
-          *ngIf="isAdmin || isManager"
-          [routerLink]="['/products/edit', product.id]"
-          class="text-blue-600 hover:underline mr-3"
-        >
-          Edit
-        </button>
+          <button *ngIf="isAdmin || isManager" [routerLink]="['/products/edit', product.id]"
+            class="bg-yellow-500 text-white px-5 ml-20 py-1 rounded hover:bg-yellow-600 transition-colors">
+            Edit
+          </button>
 
-        <button
-          *ngIf="isAdmin"
-          (click)="deleteProduct(product.id)"
-          class="text-red-600 hover:underline"
-        >
-          Delete
-        </button>
+          <button *ngIf="isAdmin" (click)="deleteProduct(product.id)"
+            class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition-colors">
+            Delete
+          </button>
 
-      </td>
+        </td>
 
-    </tr>
+      </tr>
 
-  </tbody>
+    </tbody>
 
-</table>
+  </table>
 
 </div>
 
