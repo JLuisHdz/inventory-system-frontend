@@ -1,34 +1,72 @@
-<h2>Create Product</h2>
-<h2>{{ isEditMode ? 'Edit Product' : 'Create Product' }}</h2>
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+<div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
 
-  <div>
-    <label>Name</label>
-    <input type="text" formControlName="name" />
-    <div *ngIf="productForm.get('name')?.touched && productForm.get('name')?.invalid">
-      Name is required (min 3 characters)
+  <h2 class="text-2xl font-bold mb-6 text-gray-800">
+    {{ isEditMode ? 'Edit Product' : 'Create Product' }}
+  </h2>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-4">
+
+    <!-- Name -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Name
+      </label>
+
+      <input type="text" formControlName="name" [ngClass]="{
+    'border-red-500': productForm.get('name')?.touched && productForm.get('name')?.invalid
+  }" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+      <p *ngIf="productForm.get('name')?.touched && productForm.get('name')?.invalid" class="text-red-500 text-sm mt-1">
+        Name is required (min 3 characters)
+      </p>
     </div>
-  </div>
 
-  <div>
-    <label>Description</label>
-    <input type="text" formControlName="description" />
-  </div>
+    <!-- Description -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Description
+      </label>
 
-  <div>
-    <label>Price</label>
-    <input type="number" formControlName="price" />
-  </div>
+      <input type="text" formControlName="description"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
 
-  <div>
-    <label>Stock</label>
-    <input type="number" formControlName="stock" />
-  </div>
+    <!-- Price -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Price
+      </label>
 
-  <button type="submit" [disabled]="isSubmitting">
-  {{ isSubmitting 
-      ? 'Saving...' 
-      : (isEditMode ? 'Update' : 'Save') }}
-  </button>
+      <input type="number" formControlName="price"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
 
-</form>
+    <!-- Stock -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Stock
+      </label>
+
+      <input type="number" formControlName="stock"
+        class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-3 pt-4">
+
+      <button type="button" routerLink="/products" class="px-4 py-2 border rounded hover:bg-gray-100 transition-colors">
+        Cancel
+      </button>
+
+      <button type="submit" [disabled]="isSubmitting"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors disabled:opacity-50">
+        {{ isSubmitting
+        ? 'Saving...'
+        : (isEditMode ? 'Update' : 'Save') }}
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
