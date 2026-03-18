@@ -16,7 +16,7 @@ export class ProductFormComponent {
 
   productForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
-    description: [''],
+    description: ['', Validators.required],
     price: [0, [Validators.required, Validators.min(1)]],
     stock: [0, [Validators.required, Validators.min(0)]]
   });
@@ -42,6 +42,7 @@ constructor(
   this.isSubmitting = true;   // 👈 AQUI se activa el loading
 
   const request = this.productForm.value;
+  console.log('REQUEST:', request);
 
   if (this.isEditMode) {
 
