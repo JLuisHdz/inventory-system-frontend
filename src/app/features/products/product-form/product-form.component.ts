@@ -4,13 +4,14 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ProductService } from '../../../core/services/product.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { CategoryService } from '../../../core/services/category.service';
 
 @Component({
   selector: 'app-product-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.css'
+  styleUrl: './product-form.component.css',
 })
 export class ProductFormComponent {
 
@@ -18,16 +19,19 @@ export class ProductFormComponent {
     name: ['', [Validators.required, Validators.minLength(3)]],
     description: ['', Validators.required],
     price: [0, [Validators.required, Validators.min(1)]],
-    stock: [0, [Validators.required, Validators.min(0)]]
+    stock: [0, [Validators.required, Validators.min(0)]],
+    categoryId: [null, Validators.required] 
   });
 
 isEditMode = false;
 productId!: number;
 isSubmitting = false;
+categories: any[] = [];
 
 constructor(
   private fb: FormBuilder,
   private productService: ProductService,
+  private categoryService: CategoryService,
   private router: Router,
   private route: ActivatedRoute
 ) {}
@@ -92,8 +96,16 @@ constructor(
     this.loadProduct();
 
   }
+  
+  this.categoryService.getAll().subscribe({
+    next: (res) => {
+      this.categories = res.data; // depende de tu ApiResponse
+    },
+    error: (err) => console.error(err)
+  });
 
 }
+
 
 loadProduct(): void {
 
