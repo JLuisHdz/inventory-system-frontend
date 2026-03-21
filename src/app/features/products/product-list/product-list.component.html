@@ -76,6 +76,13 @@
           </span>
         </th>
 
+        <th class="px-4 py-2 border cursor-pointer" (click)="sort('category')">
+          Category
+          <span *ngIf="sortColumn === 'category'" class="text-white">
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          </span>
+        </th>
+
         <th class="px-4 py-2 border cursor-pointer" (click)="sort('creationDate')">
           Created
           <span *ngIf="sortColumn === 'creationDate'" class="text-white">
@@ -93,7 +100,8 @@
 
     <tbody class="text-sm text-gray-700">
 
-      <tr *ngFor="let product of filteredProducts" class="border-b even:bg-gray-50 hover:bg-blue-50 transition-colors duration-150">
+      <tr *ngFor="let product of filteredProducts"
+        class="border-b even:bg-gray-50 hover:bg-blue-50 transition-colors duration-150">
 
         <td class="px-4 py-2 border">{{ product.id }}</td>
 
@@ -119,6 +127,10 @@
             Out
           </span>
 
+        </td>
+
+        <td class="px-4 py-2">
+          {{ product?.name }}
         </td>
 
         <td class="px-4 py-2 border">{{ product.creationDate }}</td>
