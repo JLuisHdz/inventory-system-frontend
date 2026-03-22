@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../core/services/auth.service';
+import { CategoryService } from '../../../core/services/category.service';
 
 @Component({
   selector: 'app-product-list',
@@ -35,7 +36,8 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private authService: AuthService
+    private authService: AuthService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +53,14 @@ export class ProductListComponent implements OnInit {
 
   // Cargar productos
   this.loadProducts();
+
+  this.categoryService.getAll().subscribe({
+  next: (res) => {
+    console.log('CATEGORIES RESPONSE:', res);
+    this.categoryService = res.data;
+  },
+  error: (err) => console.error(err)
+});
 
   // Buscador
   this.searchControl.valueChanges

@@ -11,6 +11,10 @@ export class CategoryService {
   constructor(private http: HttpClient) {}
 
   getAll() {
-    return this.http.get<any>(this.apiUrl);
-  }
+  return this.http.get<any>(this.apiUrl, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+}
 }
