@@ -20,109 +20,110 @@ export class ProductFormComponent {
     description: ['', Validators.required],
     price: [0, [Validators.required, Validators.min(1)]],
     stock: [0, [Validators.required, Validators.min(0)]],
-    categoryId: [null, Validators.required] 
+    categoryId: [null, Validators.required]
   });
 
-isEditMode = false;
-productId!: number;
-isSubmitting = false;
-categories: any[] = [];
+  isEditMode = false;
+  productId!: number;
+  isSubmitting = false;
+  categories: any[] = [];
 
-constructor(
-  private fb: FormBuilder,
-  private productService: ProductService,
-  private categoryService: CategoryService,
-  private router: Router,
-  private route: ActivatedRoute
-) {}
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService,
+    private categoryService: CategoryService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   onSubmit(): void {
 
-  if (this.productForm.invalid) {
-    this.productForm.markAllAsTouched();
-    return;
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmitting = true;   // 👈 AQUI se activa el loading
+
+    const request = this.productForm.value;
+    console.log('REQUEST:', request);
+
+    if (this.isEditMode) {
+
+      this.productService.update(this.productId, request)
+        .subscribe({
+
+          next: () => {
+            this.isSubmitting = false;   // 👈 se desactiva
+            this.router.navigate(['/products']);
+          },
+
+          error: err => {
+            console.error(err);
+            this.isSubmitting = false;   // 👈 se desactiva si falla
+          }
+
+        });
+
+    } else {
+
+      this.productService.create(request)
+        .subscribe({
+
+          next: () => {
+            this.isSubmitting = false;   // 👈 se desactiva
+            this.router.navigate(['/products']);
+          },
+
+          error: err => {
+            console.error(err);
+            this.isSubmitting = false;   // 👈 se desactiva si falla
+          }
+
+        });
+
+    }
+
   }
-
-  this.isSubmitting = true;   // 👈 AQUI se activa el loading
-
-  const request = this.productForm.value;
-  console.log('REQUEST:', request);
-
-  if (this.isEditMode) {
-
-    this.productService.update(this.productId, request)
-      .subscribe({
-
-        next: () => {
-          this.isSubmitting = false;   // 👈 se desactiva
-          this.router.navigate(['/products']);
-        },
-
-        error: err => {
-          console.error(err);
-          this.isSubmitting = false;   // 👈 se desactiva si falla
-        }
-
-      });
-
-  } else {
-
-    this.productService.create(request)
-      .subscribe({
-
-        next: () => {
-          this.isSubmitting = false;   // 👈 se desactiva
-          this.router.navigate(['/products']);
-        },
-
-        error: err => {
-          console.error(err);
-          this.isSubmitting = false;   // 👈 se desactiva si falla
-        }
-
-      });
-
-  }
-
-}
 
   ngOnInit(): void {
 
-  this.productId = Number(this.route.snapshot.paramMap.get('id'));
+    this.productId = Number(this.route.snapshot.paramMap.get('id'));
 
-  if (this.productId) {
+    if (this.productId) {
 
-    this.isEditMode = true;
-    this.loadProduct();
+      this.isEditMode = true;
+      this.loadProduct();
+
+    }
+
+    this.categoryService.getAll().subscribe({
+  next: (res) => {
+    console.log('CATEGORIES:', res);
+    this.categories = res;
+  },
+  error: (err) => console.error(err)
+});
 
   }
-  
-  this.categoryService.getAll().subscribe({
-    next: (res) => {
-      this.categories = res.data; // depende de tu ApiResponse
-    },
-    error: (err) => console.error(err)
-  });
-
-}
 
 
-loadProduct(): void {
+  loadProduct(): void {
 
-  this.productService.getById(this.productId)
-    .subscribe(response => {
+    this.productService.getById(this.productId)
+      .subscribe(response => {
 
-      const product = response.data;
+        const product = response.data;
 
-      this.productForm.patchValue({
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        stock: product.stock
+        this.productForm.patchValue({
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          stock: product.stock
+        });
+
       });
 
-    });
-
-}
+  }
 
 }
