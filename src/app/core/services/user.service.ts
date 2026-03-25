@@ -28,4 +28,8 @@ export class UserService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
+  getById(id: number) {
+  return this.http.get<any>(`${this.apiUrl}/${id}`);
+}
+
 }

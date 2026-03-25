@@ -1,1 +1,31 @@
-<p>user-list works!</p>
+<h2>Users</h2>
+
+<button routerLink="/users/create">Create User</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Name</th>
+      <th>Roles</th>
+      <th>Active</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.nombre }}</td>
+      <td>{{ user.roles.join(', ') }}</td>
+      <td>{{ user.activo }}</td>
+
+      <td>
+        <button [routerLink]="['/users/edit', user.id]">Edit</button>
+        <button (click)="deleteUser(user.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
