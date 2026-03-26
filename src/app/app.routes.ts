@@ -5,6 +5,8 @@ import { authGuard } from './core/guards/auth.guard';
 import { ProductListComponent } from './features/products/product-list/product-list.component';
 import { LayoutComponent } from './core/layout/layout.component';
 import { ProductFormComponent } from './features/products/product-form/product-form.component';
+import { UserListComponent } from './features/users/user-list/user-list.component';
+import { UserFormComponent } from './features/users/user-form/user-form.component';
 
 export const routes: Routes = [
 
@@ -19,29 +21,44 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
 
-        {
-            path: 'products/create',
-            component: ProductFormComponent
-        },
-        
-        {
-            path: 'products/edit/:id',
-            component: ProductFormComponent
-        },
+            {
+                path: 'products/create',
+                component: ProductFormComponent
+            },
 
-        {
-            path: 'dashboard',
-            component: DashboardComponent,
-            data: { animation: 'Dashboard' }
-        },
+            {
+                path: 'products/edit/:id',
+                component: ProductFormComponent
+            },
 
-        {
-            path: 'products',
-            component: ProductListComponent,
-            data: { animation: 'Dashboard' }
-        }
+            {
+                path: 'dashboard',
+                component: DashboardComponent,
+                data: { animation: 'Dashboard' }
+            },
 
-    ]
+            {
+                path: 'products',
+                component: ProductListComponent,
+                data: { animation: 'Dashboard' }
+            },
+
+            {
+                path: 'users',
+                component: UserListComponent,
+                data: { animation: 'Dashboard' }
+            },
+
+            {
+                path: 'users/create',
+                component: UserFormComponent
+            },
+            {
+                path: 'users/edit/:id',
+                component: UserFormComponent
+            }
+
+        ]
     },
 
     {

@@ -20,6 +20,10 @@
         Products
       </a>
 
+      <a *ngIf="isAdmin" routerLink="/users" routerLinkActive="bg-gray-700"
+      class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-700">
+      <lucide-icon [img]="ProductsIcon" class="w-5 h-5"></lucide-icon>Users</a>
+
     </nav>
 
   </aside>
