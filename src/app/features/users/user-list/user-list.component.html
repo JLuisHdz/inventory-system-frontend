@@ -1,31 +1,133 @@
-<h2>Users</h2>
+<div class="p-6 bg-gray-100 min-h-screen">
 
-<button routerLink="/users/create">Create User</button>
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Users</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Username</th>
-      <th>Name</th>
-      <th>Roles</th>
-      <th>Active</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
+    <a
+      routerLink="/users/create"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow"
+    >
+      + Create User
+    </a>
+  </div>
 
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.id }}</td>
-      <td>{{ user.username }}</td>
-      <td>{{ user.nombre }}</td>
-      <td>{{ user.roles.join(', ') }}</td>
-      <td>{{ user.activo }}</td>
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="text-gray-600">
+    Loading users...
+  </div>
 
-      <td>
-        <button [routerLink]="['/users/edit', user.id]">Edit</button>
-        <button (click)="deleteUser(user.id)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <!-- No results -->
+  <div *ngIf="!isLoading && users.length === 0" class="text-gray-500">
+    No users found
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!isLoading && users.length > 0" class="bg-white rounded-xl shadow overflow-hidden">
+
+    <table class="w-full text-left">
+
+      <thead class="bg-gray-200 text-gray-600 text-sm uppercase">
+        <tr>
+          <th class="px-6 py-3">ID</th>
+          <th class="px-6 py-3">Username</th>
+          <th class="px-6 py-3">Name</th>
+          <th class="px-6 py-3">Roles</th>
+          <th class="px-6 py-3">Status</th>
+          <th class="px-6 py-3 text-center">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr
+          *ngFor="let user of users"
+          class="border-b hover:bg-gray-50 transition"
+        >
+
+          <td class="px-6 py-3">{{ user.id }}</td>
+
+          <td class="px-6 py-3 font-medium text-gray-800">
+            {{ user.username }}
+          </td>
+
+          <td class="px-6 py-3">{{ user.nombre }}</td>
+
+          <!-- Roles -->
+          <td class="px-6 py-3">
+            <span
+              *ngFor="let role of user.roles"
+              class="inline-block bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded mr-1"
+            >
+              {{ role }}
+            </span>
+          </td>
+
+          <!-- Status -->
+          <td class="px-6 py-3">
+            <span
+              [ngClass]="user.activo 
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-red-100 text-red-700'"
+              class="text-xs px-2 py-1 rounded"
+            >
+              {{ user.activo ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+
+          <!-- Actions -->
+          <td class="px-6 py-3 flex justify-center gap-2">
+
+            <button
+              [routerLink]="['/users/edit', user.id]"
+              class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded"
+            >
+              Edit
+            </button>
+
+            <button
+              (click)="deleteUser(user.id)"
+              class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+            >
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- Pagination -->
+  <div
+    *ngIf="!isLoading && users.length > 0"
+    class="flex justify-between items-center mt-6"
+  >
+
+    <button
+      (click)="previousPage()"
+      [disabled]="currentPage === 0"
+      class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+    >
+      Previous
+    </button>
+
+    <span class="text-gray-700">
+      Page {{ currentPage + 1 }} of {{ totalPages }}
+    </span>
+
+    <button
+      (click)="nextPage()"
+      [disabled]="currentPage >= totalPages - 1"
+      class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+    >
+      Next
+    </button>
+
+  </div>
+
+</div>

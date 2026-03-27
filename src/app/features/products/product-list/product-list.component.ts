@@ -20,6 +20,7 @@ import { CategoryService } from '../../../core/services/category.service';
 export class ProductListComponent implements OnInit {
 
   products: Product[] = [];
+  categories: any[] = [];
   currentPage: number = 0;
   totalPages: number = 0;
   pageSize: number = 5;
@@ -41,7 +42,7 @@ export class ProductListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
+    console.log(this.products);
   console.log("Token:", localStorage.getItem("token"));
   console.log("ProductListComponent loaded");
 
@@ -57,7 +58,7 @@ export class ProductListComponent implements OnInit {
   this.categoryService.getAll().subscribe({
   next: (res) => {
     console.log('CATEGORIES RESPONSE:', res);
-    this.categoryService = res.data;
+    this.categories = res.data;
   },
   error: (err) => console.error(err)
 });
@@ -184,6 +185,14 @@ deleteProduct(id: number): void {
     }
 
   });
+
+}
+
+getCategoryName(categoryId: number): string {
+
+  const category = this.categories.find(c => c.id === categoryId);
+
+  return category ? category.name : 'N/A';
 
 }
 
