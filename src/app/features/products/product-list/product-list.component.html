@@ -1,174 +1,222 @@
-<h2 class="text-2xl font-bold mb-4">Products</h2>
+<div class="p-6 bg-gray-100 min-h-screen">
 
-<div *ngIf="isLoading">
-  Loading products...
-</div>
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Products</h2>
 
-<div *ngIf="!isLoading && !hasResults">
-  No products found
-</div>
+    <a
+      routerLink="/products/create"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow"
+    >
+      + Create Product
+    </a>
+  </div>
 
-<div class="mb-3">
-  <input type="text" placeholder="Search by name..." [formControl]="searchControl" class="border p-2 rounded" />
-</div>
+  <!-- Search -->
+  <div class="mb-4">
+    <input
+      type="text"
+      placeholder="Search by name..."
+      [formControl]="searchControl"
+      class="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+  </div>
 
-<div class="filters mb-4">
+  <!-- Filters -->
+  <div class="flex gap-2 mb-6">
 
-  <button (click)="setFilter('all')" class="px-3 py-1 border rounded hover:bg-gray-100 transition-colors">
-    All
-  </button>
+    <button
+      (click)="setFilter('all')"
+      class="px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-200 transition"
+    >
+      All
+    </button>
 
-  <button (click)="setFilter('low')" class="px-3 py-1 border rounded hover:bg-gray-100 transition-colors">
-    Low Stock
-  </button>
+    <button
+      (click)="setFilter('low')"
+      class="px-3 py-1 border border-gray-300 rounded-lg hover:bg-yellow-100 transition"
+    >
+      Low Stock
+    </button>
 
-  <button (click)="setFilter('out')" class="px-3 py-1 border rounded hover:bg-gray-100 transition-colors">
-    Out of Stock
-  </button>
+    <button
+      (click)="setFilter('out')"
+      class="px-3 py-1 border border-gray-300 rounded-lg hover:bg-red-100 transition"
+    >
+      Out of Stock
+    </button>
 
-</div>
+  </div>
 
-<button routerLink="/products/create"
-  class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-150">
-  Create Product
-</button>
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="text-gray-600">
+    Loading products...
+  </div>
 
-<div class="overflow-x-auto">
+  <!-- No results -->
+  <div *ngIf="!isLoading && !hasResults" class="text-gray-500">
+    No products found
+  </div>
 
-  <table class="min-w-full bg-white rounded shadow hover:shadow-md transition-shadow" *ngIf="!isLoading && hasResults">
+  <!-- Table -->
+  <div *ngIf="!isLoading && hasResults" class="bg-white rounded-xl shadow overflow-hidden">
 
-    <thead class="bg-gray-800 text-white">
+    <table class="w-full text-left">
 
-      <tr class="border-b hover:bg-gray-700 transition-colors duration-150">
+      <thead class="bg-gray-200 text-gray-600 text-sm uppercase">
+        <tr>
 
-        <th class="px-4 py-2 border cursor-pointer" (click)="sort('id')">
-          Id
-          <span *ngIf="sortColumn === 'id'" class="text-white">
-            {{ sortDirection === 'asc' ? '↑' : '↓' }}
-          </span>
-        </th>
+          <th class="px-6 py-3 cursor-pointer" (click)="sort('id')">
+            Id
+            <span *ngIf="sortColumn === 'id'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
 
-        <th class="px-4 py-2 border cursor-pointer" (click)="sort('name')">
-          Name
-          <span *ngIf="sortColumn === 'name'" class="text-white">
-            {{ sortDirection === 'asc' ? '↑' : '↓' }}
-          </span>
-        </th>
+          <th class="px-6 py-3 cursor-pointer" (click)="sort('name')">
+            Name
+            <span *ngIf="sortColumn === 'name'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
 
-        <th class="px-4 py-2 border cursor-pointer" (click)="sort('description')">
-          Description
-          <span *ngIf="sortColumn === 'description'" class="text-white">
-            {{ sortDirection === 'asc' ? '↑' : '↓' }}
-          </span>
-        </th>
+          <th class="px-6 py-3">Description</th>
 
-        <th class="px-4 py-2 border cursor-pointer" (click)="sort('price')">
-          Price
-          <span *ngIf="sortColumn === 'price'" class="text-white">
-            {{ sortDirection === 'asc' ? '↑' : '↓' }}
-          </span>
-        </th>
+          <th class="px-6 py-3 cursor-pointer" (click)="sort('price')">
+            Price
+            <span *ngIf="sortColumn === 'price'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
 
-        <th class="px-4 py-2 border cursor-pointer" (click)="sort('stock')">
-          Stock
-          <span *ngIf="sortColumn === 'stock'" class="text-white">
-            {{ sortDirection === 'asc' ? '↑' : '↓' }}
-          </span>
-        </th>
+          <th class="px-6 py-3 cursor-pointer" (click)="sort('stock')">
+            Stock
+            <span *ngIf="sortColumn === 'stock'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
 
-        <th class="px-4 py-2 border cursor-pointer" (click)="sort('category')">
-          Category
-          <span *ngIf="sortColumn === 'category'" class="text-white">
-            {{ sortDirection === 'asc' ? '↑' : '↓' }}
-          </span>
-        </th>
+          <th class="px-6 py-3">Category</th>
 
-        <th class="px-4 py-2 border cursor-pointer" (click)="sort('creationDate')">
-          Created
-          <span *ngIf="sortColumn === 'creationDate'" class="text-white">
-            {{ sortDirection === 'asc' ? '↑' : '↓' }}
-          </span>
-        </th>
+          <th class="px-6 py-3 cursor-pointer" (click)="sort('creationDate')">
+            Created
+            <span *ngIf="sortColumn === 'creationDate'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
 
-        <th class="px-4 py-2 border">
-          Actions
-        </th>
+          <th class="px-6 py-3 text-center">Actions</th>
 
-      </tr>
+        </tr>
+      </thead>
 
-    </thead>
+      <tbody>
 
-    <tbody class="text-sm text-gray-700">
+        <tr
+          *ngFor="let product of filteredProducts"
+          class="border-b hover:bg-gray-50 transition"
+        >
 
-      <tr *ngFor="let product of filteredProducts"
-        class="border-b even:bg-gray-50 hover:bg-blue-50 transition-colors duration-150">
+          <td class="px-6 py-3">{{ product.id }}</td>
 
-        <td class="px-4 py-2 border">{{ product.id }}</td>
+          <td class="px-6 py-3 font-medium text-gray-800">
+            {{ product.name }}
+          </td>
 
-        <td class="px-4 py-2 border">{{ product.name }}</td>
+          <td class="px-6 py-3 text-sm text-gray-600">
+            {{ product.description }}
+          </td>
 
-        <td class="px-4 py-2 border">{{ product.description }}</td>
+          <td class="px-6 py-3">${{ product.price }}</td>
 
-        <td class="px-4 py-2 border">{{ product.price }}</td>
+          <!-- Stock -->
+          <td class="px-6 py-3">
+            <span
+              [ngClass]="{
+                'bg-green-100 text-green-700': product.stock > 5,
+                'bg-yellow-100 text-yellow-700': product.stock > 0 && product.stock <= 5,
+                'bg-red-100 text-red-700': product.stock === 0
+              }"
+              class="text-xs px-2 py-1 rounded"
+            >
+              {{ product.stock }}
 
-        <td class="px-4 py-2 border" [ngClass]="{
-          'bg-green-100': product.stock > 5,
-          'bg-yellow-100': product.stock > 0 && product.stock <= 5,
-          'bg-red-100': product.stock === 0
-        }">
+              <span *ngIf="product.stock > 0 && product.stock <= 5">
+                - Low
+              </span>
 
-          {{ product.stock }}
+              <span *ngIf="product.stock === 0">
+                - Out
+              </span>
+            </span>
+          </td>
 
-          <span *ngIf="product.stock > 0 && product.stock <= 5">
-            ⚠ Low
-          </span>
+          <!-- Category -->
+          <td class="px-6 py-3">
+            <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
+              {{ product?.name }}
+            </span>
+          </td>
 
-          <span *ngIf="product.stock === 0">
-            Out
-          </span>
+          <td class="px-6 py-3 text-sm">
+            {{ product.creationDate }}
+          </td>
 
-        </td>
+          <!-- Actions -->
+          <td class="px-6 py-3 flex justify-center gap-2">
 
-        <td class="px-4 py-2">
-          {{ product?.name }}
-        </td>
+            <button
+              *ngIf="isAdmin || isManager"
+              [routerLink]="['/products/edit', product.id]"
+              class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded"
+            >
+              Edit
+            </button>
 
-        <td class="px-4 py-2 border">{{ product.creationDate }}</td>
+            <button
+              *ngIf="isAdmin"
+              (click)="deleteProduct(product.id)"
+              class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+            >
+              Delete
+            </button>
 
-        <td class="px-4 py-2 border flex gap-4">
+          </td>
 
-          <button *ngIf="isAdmin || isManager" [routerLink]="['/products/edit', product.id]"
-            class="bg-yellow-500 text-white px-5 ml-20 py-1 rounded hover:bg-yellow-600 transition-colors">
-            Edit
-          </button>
+        </tr>
 
-          <button *ngIf="isAdmin" (click)="deleteProduct(product.id)"
-            class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition-colors">
-            Delete
-          </button>
+      </tbody>
 
-        </td>
+    </table>
 
-      </tr>
+  </div>
 
-    </tbody>
+  <!-- Pagination -->
+  <div
+    *ngIf="!isLoading && hasResults"
+    class="flex justify-between items-center mt-6"
+  >
 
-  </table>
+    <button
+      (click)="previousPage()"
+      [disabled]="currentPage === 0 || isLoading"
+      class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+    >
+      Previous
+    </button>
 
-</div>
+    <span class="text-gray-700">
+      Page {{ currentPage + 1 }} of {{ totalPages }}
+    </span>
 
-<div style="margin-top: 20px;" class="pagination">
+    <button
+      (click)="nextPage()"
+      [disabled]="currentPage >= totalPages - 1 || isLoading"
+      class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+    >
+      Next
+    </button>
 
-  <button (click)="previousPage()" [disabled]="currentPage === 0 || isLoading">
-    Previous
-  </button>
-
-  <span>
-    Page {{ currentPage + 1 }} of {{ totalPages }}
-  </span>
-
-  <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1 || isLoading">
-    Next
-  </button>
+  </div>
 
 </div>
