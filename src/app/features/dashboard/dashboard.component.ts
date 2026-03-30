@@ -12,36 +12,68 @@ import { NgChartsModule } from 'ng2-charts';
 export class DashboardComponent {
 
   constructor(
-      private productService: ProductService,
-    ) {}
+    private productService: ProductService,
+  ) {}
 
   stats: any;
   chartData: any;
 
-ngOnInit(): void {
+  products: any[] = [];
 
-  this.productService.getStats().subscribe({
+  lowStockProducts: any[] = [];
+  outOfStockProducts: any[] = [];
 
-    next: res => {
+  ngOnInit(): void {
 
-      this.stats = res.data;
+    // 🔹 Stats (lo que ya tienes)
+    this.productService.getStats().subscribe({
+      next: res => {
 
-      this.chartData = {
-        labels: ['Total Products', 'Low Stock'],
-        datasets: [
-          {
-            data: [
-              this.stats.totalProducts,
-              this.stats.lowStockProducts
-            ]
-          }
-        ]
-      };
+        this.stats = res.data;
 
-    }
+        this.chartData = {
+          labels: ['Total Products', 'Low Stock'],
+          datasets: [
+            {
+              data: [
+                this.stats.totalProducts,
+                this.stats.lowStockProducts
+              ]
+            }
+          ]
+        };
 
-  });
+      }
+    });
 
-}
+    // 🔥 NUEVO: traer productos para alerts
+    this.loadProducts();
+
+  }
+
+  loadProducts(): void {
+
+    this.productService.getAll(0, 100).subscribe({
+
+      next: res => {
+
+        // ⚠️ Ajusta esto según tu backend
+        this.products = res.data.content;
+
+        // 🔴 Out of stock
+        this.outOfStockProducts = this.products.filter(
+          (p: any) => p.stock === 0
+        );
+
+        // 🟡 Low stock
+        this.lowStockProducts = this.products.filter(
+          (p: any) => p.stock > 0 && p.stock <= 5
+        );
+
+      }
+
+    });
+
+  }
 
 }

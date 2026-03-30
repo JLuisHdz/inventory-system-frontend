@@ -19,10 +19,57 @@
 
 </div>
 
+<div class="mt-8 bg-white rounded-xl shadow p-6">
+
+  <h3 class="text-lg font-semibold text-gray-800 mb-4">
+    ⚠ Alerts
+  </h3>
+
+  <!-- No alerts -->
+  <div *ngIf="lowStockProducts.length === 0 && outOfStockProducts.length === 0" class="text-gray-500">
+    No alerts. Everything looks good 👍
+  </div>
+
+  <!-- Alerts list -->
+  <div class="space-y-3">
+
+    <!-- Out of stock -->
+    <div *ngFor="let product of outOfStockProducts"
+      class="flex justify-between items-center bg-red-50 border border-red-200 p-3 rounded-lg">
+
+      <span class="text-red-700 font-medium">
+        {{ product.name }}
+      </span>
+
+      <span class="text-sm text-red-600">
+        Out of stock
+      </span>
+
+    </div>
+
+    <!-- Low stock -->
+    <div *ngFor="let product of lowStockProducts"
+      class="flex justify-between items-center bg-yellow-50 border border-yellow-200 p-3 rounded-lg">
+
+      <span class="text-yellow-700 font-medium">
+        {{ product.name }}
+      </span>
+
+      <span class="text-sm text-yellow-600">
+        Low stock ({{ product.stock }})
+      </span>
+
+    </div>
+
+  </div>
+
+  <button routerLink="/products" class="text-sm text-blue-600 hover:underline mt-4">
+    View all products →
+  </button>
+
+</div>
+
 <div style="width: 400px; margin-top: 40px;">
-  <canvas
-    baseChart
-    [data]="chartData"
-    [type]="'pie'">
+  <canvas baseChart [data]="chartData" [type]="'pie'">
   </canvas>
 </div>
