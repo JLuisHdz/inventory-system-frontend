@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ProductService } from '../../core/services/product.service';
 import { NgChartsModule } from 'ng2-charts';
+import { Chart } from 'chart.js/auto';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +18,7 @@ export class DashboardComponent {
 
   stats: any;
   chartData: any;
+  chart: any;
 
   products: any[] = [];
 
@@ -57,8 +59,9 @@ export class DashboardComponent {
 
       next: res => {
 
-        // ⚠️ Ajusta esto según tu backend
+      
         this.products = res.data.content;
+        this.createCategoryChart();
 
         // 🔴 Out of stock
         this.outOfStockProducts = this.products.filter(
@@ -75,5 +78,47 @@ export class DashboardComponent {
     });
 
   }
+
+  createCategoryChart(): void {
+
+  const categoryMap: any = {};
+
+  this.products.forEach((p: any) => {
+    const category = p.category?.name || 'No Category';
+
+    if (!categoryMap[category]) {
+      categoryMap[category] = 0;
+    }
+
+    categoryMap[category]++;
+  });
+
+  const labels = Object.keys(categoryMap);
+  const data = Object.values(categoryMap);
+
+  if (this.chart) {
+    this.chart.destroy();
+  }
+
+  this.chart = new Chart('categoryChart', {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Products per Category',
+        data: data
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+
+}
 
 }
